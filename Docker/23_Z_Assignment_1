@@ -3,6 +3,7 @@ In addition, there is a new service that provides a list of vegetables. This new
 
 1. Scale the service called products-fruit to 5 replicas.
   docker run --publish 8080:8080 -detach --name fruit-list fruit-list:1.0.0
+  docker service create --replicas 5 -p 8080:80 --name fruit-list fruit-list:1.0.0
 
 2. Create a new service called products-vegetables running the linuxacademycontent/vegetable-service:1.0.0 image.
   docker service create --replicas 3 --name products-vegetables linuxacademycontent/vegetable-service:1.0.0
