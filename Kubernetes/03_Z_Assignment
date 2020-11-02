@@ -13,10 +13,8 @@ Pass in the -g daemon off; -q args to run nginx in quiet mode.
 Create the pod in the web namespace.
 Once the pod is created, you should be able to find it with kubectl get pods -n web. Once the pod is created, you can get more information about its current status with kubectl describe pod nginx -n web.
 
-kubectl create -f nginx.yaml
-
 nginx.yaml
-apiVersion:v1
+apiVersion: apps/v1
 kind: Pod
 metadata:
   name: nginx
@@ -30,5 +28,6 @@ spec:
     ports:
     - containerPort: 80
 
+kubectl create -f nginx.yaml
 
 kubectl get pods -n web
