@@ -53,3 +53,106 @@ kubectl exec busybox -- curl $(kubectl get pod fruit-service -o=custom-columns=I
 If the service is working, you should see some JSON listing various types of fruit.
 
 
+**********************************************************************************************************************************************************************
+fruit-service-ambassador-config.yaml
+------------------------------------
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fruit-service-ambassador-config
+data:
+  haproxy.cfg: |-
+    global
+        daemon
+        maxconn 256
+
+    defaults
+        mode http
+        timeout connect 5000ms
+        timeout client 50000ms
+        timeout server 50000ms
+
+    listen http-in
+        bind *:80
+        server server1 127.0.0.1:8775 maxconn 32
+        
+fruit-service.yaml
+-------------------
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fruit-service
+spec:
+  containers:
+  - name: fruit-service
+    image: linuxacademycontent/legacy-fruit-service:1
+    ports:
+    - containerPort: 80
+
+haproxy.yaml
+------------
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ambassador-pattern
+spec:
+  containers:
+  - name: fruit-service
+    image: haproxy:1.7
+    ports:
+    - containerPort: 80
+    volumeMounts:
+    - name: haproxy
+      mountPath: /usr/local/etc/haproxy/haproxy.cfg
+    securityContext:
+      privileged: true
+    volumes:
+    - name: haproxy
+      configMap:
+        name: haproxy
+
+kubectl run fruit-service --image=linuxacademycontent/legacy-fruit-service:1 --port=80
+kubectl get pods
+kubectl apply -f fruit-service-ambassador-config.yaml
+kubectl apply -f haproxy.yaml
+kubectl get pods
+fruit-service.yaml
+------------------------------------
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fruit-service
+spec:
+  containers:
+  - name: fruit-service
+    image: linuxacademycontent/legacy-fruit-service:1
+    ports:
+    - containerPort: 80
+
+haproxy.yaml
+------------
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ambassador-pattern
+spec:
+  containers:
+  - name: fruit-service
+    image: haproxy:1.7
+    ports:
+    - containerPort: 80
+    volumeMounts:
+    - name: haproxy
+      mountPath: /usr/local/etc/haproxy/haproxy.cfg
+    securityContext:
+      privileged: true
+    volumes:
+    - name: haproxy
+      configMap:
+        name: haproxy
+
+kubectl run fruit-service --image=linuxacademycontent/legacy-fruit-service:1 --port=80
+kubectl get pods
+kubectl apply -f fruit-service-ambassador-config.yaml
+kubectl apply -f haproxy.yaml
+kubectl get pods
