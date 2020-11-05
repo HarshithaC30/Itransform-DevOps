@@ -33,3 +33,38 @@ After you have updated the image using a rolling update, check on the status of 
 
 Make sure that the rolling update is in such a way that atleast 25% of pods are up and running during update with Zero downtime.
 
+*********************************************************************************************************************************************************************************************************************************************************************************************************************************
+
+candy-deployment.yaml
+----------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: candy-deployment
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 75%
+  selector:
+    matchLabels:
+      app: candy-ws
+  template:
+    metadata:
+      labels:
+        app: candy-ws
+    spec:
+      containers:
+      - image: linuxacademycontent/candy-service:3
+        name: candy-ws
+
+
+kubectl apply -f candy-deployment.yaml --record=true
+
+kubectl rollout status deployment candy-deployment
+
+kubectl rollout history deployment candy-deployment
+
+
