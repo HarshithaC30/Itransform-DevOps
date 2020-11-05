@@ -14,6 +14,7 @@ Create the pod in the web namespace.
 Once the pod is created, you should be able to find it with kubectl get pods -n web. Once the pod is created, you can get more information about its current status with kubectl describe pod nginx -n web.
 
 nginx.yaml
+-----------
 apiVersion: apps/v1
 kind: Pod
 metadata:
