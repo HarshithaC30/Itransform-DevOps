@@ -25,6 +25,7 @@ Good luck!
 
 
 candy-service-pod.yaml
+----------------------
 apiVersion: v1
 kind: Pod
 metadata:
@@ -59,6 +60,7 @@ spec:
 
 
 config-map.yaml
+---------------
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -70,6 +72,7 @@ data:
     candy.lemon.acceptability=0
 
 db-pass-secret.yaml
+-------------------
 apiVersion: v1
 kind: Secret
 metadata:
@@ -78,4 +81,15 @@ stringData:
   password: Kub3rn3t3sRul3s!
   
   
-  
+*******************************************************
+
+kubectl create configmap candy-service-config --from-file=/etc/candy-service/candy.cfg
+
+kubectl apply -f db-pass-secret.yaml
+
+kubectl get secret
+
+kubectl apply -f candy-service.yaml
+
+kubectl get pods
+
