@@ -24,21 +24,34 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: pizza-deployment
+  namespace: pizza
 spec:
   replicas: 3
+  selector:
+    matchLabels:
+      app: pizza
   template:
+    metadata:
+      labels:
+        app: pizza
     spec:
       containers:
-      - name: test-pizza
+      - name: pizza
         image: linuxacademycontent/pizza-service:1.14.6
+        command: ["nginx"]
+        args: ["-g", "daemon off;"]
         ports:
         - containerPort: 80
-      - name: nginx-pizza
-        image: nginx:latest
-        ports:
-        - containerPort: 80
-      - name: liveness
-        image: k8s.gcr.io/liveness
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+            
+kubectl apply -f pizza-deployment.yaml
 
 pizza-service.yaml
 ------------------
@@ -46,14 +59,16 @@ apiVersion: v1
 kind: Service
 metadata:
   name: pizza-service
+  namespace: pizza
 spec:
+  type: NodePort
   selector:
-    app: pizza-deployment
+    app: pizza
   ports:
   - protocol: TCP
-    port: 30080
-    targetPort: 80
+    port: 80
+    nodePort: 30080
 
-kubectl apply -f pizza-deployment.yaml
+
 kubectl apply -f pizza-service.yaml
 
