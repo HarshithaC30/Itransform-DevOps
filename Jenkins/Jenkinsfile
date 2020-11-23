@@ -10,13 +10,13 @@ pipeline {
         
         stage('checkout'){
               steps {
-         git 'https://github.com/vishnuishpujani/JenkinsSample.git'      
+         git 'https://github.com/HarshithaC30/Itransform-DevOps/edit/master/Jenkins.git'      
         }
               }
       stage('Build Project') {
          steps {
             // Get some code from a GitHub repository 
-            //git 'https://github.com/vishnuishpujani/JenkinsSample.git'
+            //git 'https://github.com/HarshithaC30/Itransform-DevOps/edit/master/Jenkins.git'
             sh "mvn clean compile"
          }
          }
