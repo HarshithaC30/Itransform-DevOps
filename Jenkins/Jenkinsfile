@@ -10,19 +10,19 @@ pipeline {
         
         stage('checkout'){
               steps {
-         git 'https://github.com/HarshithaC30/Itransform-DevOps/edit/master/Jenkins.git'      
+         git 'https://github.com/HarshithaC30/Itransform-DevOps/blob/master/Jenkins.git'      
         }
               }
       stage('Build Project') {
          steps {
             // Get some code from a GitHub repository 
-            //git 'https://github.com/HarshithaC30/Itransform-DevOps/edit/master/Jenkins.git'
+            //git 'https://github.com/HarshithaC30/Itransform-DevOps/blob/master/Jenkins.git'
             sh "mvn clean compile"
          }
          }
       //stage("Test") {
       //    steps {
-       //     //git 'https://github.com/vishnuishpujani/JenkinsSample.git'  
+       //     //git 'https://github.com/HarshithaC30/Itransform-DevOps/blob/master/Jenkins.git'  
        //     bat "mvn clean test"
             
        //   }
@@ -30,7 +30,7 @@ pipeline {
       //}
       stage("Deploy") {
           steps {
-            git 'https://github.com/vishnuishpujani/JenkinsSample.git'  
+            git 'https://github.com/HarshithaC30/Itransform-DevOps/blob/master/Jenkins.git'  
             sh "mvn clean install"
             
           }
